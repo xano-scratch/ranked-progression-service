@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "objects": {
+    "app:ranked": {
+      "guid": "5669103f203bf9c9b7c520f604b241b5",
+      "canonical": "ranked",
+      "canonical_source": "code"
+    },
+    "dbo:audit_log": {
+      "guid": "1b71dcef19b2eeb1855a87ace88ef1a0"
+    },
+    "dbo:match_results": {
+      "guid": "32184ea33ef716014b572d7a0f927dd1"
+    },
+    "dbo:players": {
+      "guid": "28b6dc06e4a5a749949999ebdf052eb5"
+    },
+    "dbo:ranked_states": {
+      "guid": "9268e1fd592de3862a8509e75f9f4fb0"
+    },
+    "dbo:rating_history": {
+      "guid": "17a05f21222513af9e59a7946e5602f0"
+    },
+    "dbo:seasons": {
+      "guid": "7638f7f34c798e1bd8014daae75fb6cc"
+    },
+    "dbo:staff": {
+      "guid": "45722426fb164d5cf871016a08397ac1"
+    },
+    "query:ranked|GET|audit": {
+      "guid": "864e638b0ce59108821ceea9e6c49381"
+    },
+    "query:ranked|GET|players": {
+      "guid": "6a403462f84205e29a6349ad7b5ef645"
+    },
+    "query:ranked|GET|rank/{player_id}": {
+      "guid": "c141da496ca1dd500a359f9e17a0f950"
+    },
+    "query:ranked|GET|seasons": {
+      "guid": "641e0620867d44245d977950e5c7f91f"
+    },
+    "query:ranked|POST|advance": {
+      "guid": "1a9f286ced8a208911f1374a1112cb52"
+    },
+    "query:ranked|POST|close": {
+      "guid": "451009ebccd5602536f4fb7f71f8feed"
+    },
+    "query:ranked|POST|login": {
+      "guid": "87ef27d0d9505fdb576d9943c057b0c2"
+    },
+    "query:ranked|POST|override": {
+      "guid": "d997ebea97c23b00e15c0f930ff231f2"
+    },
+    "query:ranked|POST|report": {
+      "guid": "90fd8a5a1ea148d7a690a61f9a4bde9c"
+    },
+    "query:ranked|POST|seed": {
+      "guid": "74b9cd256b63e8652cd27533e0d0d73e"
+    }
+  }
+}

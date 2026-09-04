@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ranked Progression Service · XanoTS template</title>
+    <meta
+      name="description"
+      content="A governed ranked-play backend authored in TypeScript with XanoTS. A progression state machine, rating math with bounds, and API-layer RBAC in one readable layer."
+    />
+    <style>
+      :root {
+        --bg: #0a0b0f;
+        --panel: #12141b;
+        --panel-2: #171a22;
+        --border: #262a35;
+        --text: #e7e9ee;
+        --muted: #9aa1b1;
+        --accent: #7c9cff;
+        --accent-2: #a78bfa;
+        --emerald: #34d399;
+        --amber: #fbbf24;
+        --radius: 14px;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: radial-gradient(1200px 600px at 50% -10%, #16192400, #0a0b0f 60%), var(--bg);
+        color: var(--text);
+        font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+      a { color: var(--accent); text-decoration: none; }
+      .badges { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 40px; }
+      .badge {
+        display: inline-flex; align-items: center; gap: 6px;
+        border: 1px solid var(--border); background: var(--panel);
+        color: var(--muted); font-size: 12.5px; font-weight: 500;
+        padding: 4px 11px; border-radius: 999px;
+      }
+      .badge.play { color: var(--accent); border-color: #2c3a6b; background: #131a2e; }
+      h1 {
+        text-align: center; font-size: 46px; line-height: 1.1; letter-spacing: -0.02em;
+        margin: 18px 0 10px;
+      }
+      .tagline {
+        text-align: center; color: var(--muted); font-size: 18px;
+        max-width: 640px; margin: 0 auto;
+      }
+      .meta {
+        text-align: center; color: var(--text); font-weight: 600;
+        margin: 20px auto 0; font-variant-numeric: tabular-nums;
+      }
+      .hero-actions { display: flex; gap: 12px; justify-content: center; margin: 26px 0 8px; }
+      .btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 11px 20px; border-radius: 10px; font-weight: 600; font-size: 15px;
+        border: 1px solid transparent; cursor: pointer; transition: all 0.15s ease;
+      }
+      .btn.primary { background: var(--accent); color: #0a0b0f; }
+      .btn.primary:hover { background: #93abff; }
+      .btn.ghost { background: transparent; color: var(--text); border-color: var(--border); }
+      .btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
+      .shot {
+        margin: 40px auto 0; border: 1px solid var(--border); border-radius: var(--radius);
+        overflow: hidden; box-shadow: 0 30px 80px -40px #000;
+      }
+      .shot img { display: block; width: 100%; height: auto; }
+      section { margin-top: 64px; }
+      h2 { font-size: 24px; letter-spacing: -0.01em; margin: 0 0 6px; }
+      .section-sub { color: var(--muted); margin: 0 0 22px; }
+      .cards { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+      .card {
+        border: 1px solid var(--border); background: var(--panel);
+        border-radius: var(--radius); padding: 18px 20px;
+      }
+      .card h3 { margin: 0 0 8px; font-size: 16px; }
+      .card p { margin: 0; color: var(--muted); font-size: 14.5px; }
+      table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+      th, td { text-align: left; padding: 11px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+      th { color: var(--muted); font-weight: 600; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.04em; }
+      td code { color: var(--accent); font-size: 13px; }
+      .verb { font: 600 12px ui-monospace, monospace; color: var(--emerald); }
+      .panel {
+        border: 1px solid var(--border); background: var(--panel);
+        border-radius: var(--radius); overflow: hidden;
+      }
+      .screens { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+      .screen { border: 1px solid var(--border); background: var(--panel); border-radius: 12px; padding: 16px 18px; }
+      .screen strong { display: block; margin-bottom: 4px; }
+      .screen span { color: var(--muted); font-size: 14px; }
+      pre {
+        background: var(--panel-2); border: 1px solid var(--border); border-radius: 12px;
+        padding: 16px 18px; overflow-x: auto; margin: 0;
+      }
+      pre code { font: 13.5px/1.65 ui-monospace, "SF Mono", Menlo, monospace; color: #cdd3e1; }
+      .note {
+        margin-top: 18px; border: 1px solid #3a3320; background: #1a1710;
+        color: #d9c58a; border-radius: 12px; padding: 12px 16px; font-size: 14px;
+      }
+      footer {
+        margin-top: 72px; padding: 28px 0 48px; border-top: 1px solid var(--border);
+        color: var(--muted); font-size: 13.5px; text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="badges">
+        <span class="badge play">Play 2 · Backend Modernization</span>
+        <span class="badge">Competitive gaming</span>
+        <span class="badge">XanoTS</span>
+      </div>
+
+      <h1>Ranked Progression Service</h1>
+      <p class="tagline">
+        A governed ranked-play backend. The progression state machine, the rating math and its
+        bounds, and the admin-only authority all live in one readable API layer.
+      </p>
+      <p class="meta">7 tables · 10 endpoints · 2 rating-engine lambdas · API-layer RBAC</p>
+
+      <div class="hero-actions">
+        <a class="btn primary" href="https://github.com/xano-scratch/ranked-progression-service"
+          >View on GitHub</a
+        >
+        <a class="btn ghost" href="#use">Use this template</a>
+      </div>
+
+      <div class="shot">
+        <img
+          src="screenshot.png"
+          alt="The roster across every phase and a player's governed climb with an append-only ledger"
+        />
+      </div>
+
+      <section>
+        <h2>What it demonstrates</h2>
+        <p class="section-sub">
+          A studio backend engineer replaces ranking logic scattered across game servers with one
+          service a reviewer can read and trust. Control is the point, not speed.
+        </p>
+        <div class="cards">
+          <div class="card">
+            <h3>A progression state machine</h3>
+            <p>
+              placement to ranked, a promotion series that resolves to promoted or falls back, and a
+              bottom-boundary demotion. Terminal phases refuse a further result.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Rating math with bounds</h3>
+            <p>
+              An Elo-style step, capped per match, clamped so it never goes below zero. The math sits
+              in one lambda next to the explicit guards.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Authority in one place</h3>
+            <p>
+              API-layer RBAC. A reporter reports a match. Only an admin overrides a rating or moves a
+              season. The role is read from the row, not claimed by the client. No row-level security.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>API surface</h2>
+        <p class="section-sub">Every endpoint is under <code>/api:ranked/</code>.</p>
+        <div class="panel">
+          <table>
+            <thead>
+              <tr>
+                <th>Endpoint</th>
+                <th>What it enforces</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="verb">POST</span> <code>/seed</code></td><td>Resets and loads the demo. Public, so a fresh deploy is browsable.</td></tr>
+              <tr><td><span class="verb">POST</span> <code>/login</code></td><td>Verifies a staff credential and mints a token carrying the role.</td></tr>
+              <tr><td><span class="verb">GET</span> <code>/players</code></td><td>The roster for a season: each player's phase, tier, and rating.</td></tr>
+              <tr><td><span class="verb">GET</span> <code>/rank/{player_id}</code></td><td>One player's standing plus their append-only history and matches.</td></tr>
+              <tr><td><span class="verb">POST</span> <code>/report</code></td><td>Recomputes rating within bounds, drives the transition, refuses a terminal phase or a non-active season.</td></tr>
+              <tr><td><span class="verb">POST</span> <code>/advance</code> · <code>/close</code></td><td>Season lifecycle. Refuses an illegal move. Admin only, audited.</td></tr>
+              <tr><td><span class="verb">POST</span> <code>/override</code></td><td>The one sanctioned bypass. Re-derives the rank, records the change. Admin only.</td></tr>
+              <tr><td><span class="verb">GET</span> <code>/audit</code></td><td>The append-only trail of every governed action. Admin only.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h2>The frontend</h2>
+        <p class="section-sub">
+          React and Vite, styled with shadcn/ui. It reads paths and types straight from the backend
+          defs (the one contract), so a change to an endpoint flows into the UI.
+        </p>
+        <div class="screens">
+          <div class="screen"><strong>Roster</strong><span>The ladder for a season, with every player's phase and rank.</span></div>
+          <div class="screen"><strong>Player detail</strong><span>A standing plus the append-only rating history and match results.</span></div>
+          <div class="screen"><strong>Report &amp; govern</strong><span>Report a match, or try an admin action and watch the API refuse it.</span></div>
+          <div class="screen"><strong>Audit trail</strong><span>Every governed action, newest first, with the acting staff member.</span></div>
+        </div>
+      </section>
+
+      <section id="use">
+        <h2>Use this template</h2>
+        <p class="section-sub">
+          Paste this to a coding agent to stand it up on your own Xano instance, then adapt the state
+          machine and rating engine to your domain.
+        </p>
+        <pre><code>Clone the XanoTS template at
+https://github.com/xano-scratch/ranked-progression-service
+
+Run: npm install, then npx xanots login, then npm run xano:deploy
+It prints a live URL and loads demo data on first visit.
+
+Then help me adapt the ranked_states state machine and the rating
+engine in xano/api/report.ts to my own domain and rules.</code></pre>
+        <div class="note">
+          The live preview links are ephemeral and expire. The durable artifact is this repo. Anyone
+          can re-deploy fresh links with <code>npm run xano:deploy</code>.
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <div class="wrap">
+        Authored in TypeScript with the XanoTS SDK. Auth is API-layer RBAC (no row-level security).
+        An example backend, built to show the pattern.
+      </div>
+    </footer>
+  </body>
+</html>
